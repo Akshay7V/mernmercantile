@@ -10,11 +10,12 @@ import ProductDetails from "./pages/ProductDetails";
 import CartPage from "./pages/CartPage";
 import { CartProvider } from "./context/CartContext";
 import AdminSignup from "./pages/AdminSignup";
+import AdminLogin from "./pages/AdminLogin";
 
 
 import AdminProfile from "./pages/AdminProfile";
 import OrderPage from "./pages/OrderPage"; // ✅ Import OrderPage
-import StdLogin from "./pages/StdLogin"; // ✅ Import OrderPage
+
 function App() {
   return (
     <CartProvider>
@@ -30,7 +31,7 @@ function App() {
         <Route path="/admin-signup" element={<AdminSignup />} />
         <Route path="/admin-profile" element={<AdminProfile />} />
         <Route path="/order" element={<OrderPage />} />
-        <Route path="/StdLogin" element={<StdLogin />} />
+        <Route path="/admin/admin-login" element={<AdminLogin />} />
       </Routes>
     </CartProvider>
   );

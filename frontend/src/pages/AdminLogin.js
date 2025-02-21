@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,7 +33,7 @@ const AdminLogin = () => {
       setMessage("Login successful! Redirecting...");
       localStorage.setItem("adminToken", data.token);
       setTimeout(() => {
-        window.location.href = "/admin-dashboard"; // Redirect after success
+        navigate("/admin-dashboard");
       }, 1500);
     } catch (err) {
       setLoading(false);
@@ -102,10 +105,6 @@ const styles = {
     borderRadius: "5px",
     cursor: "pointer",
     transition: "background 0.3s ease-in-out",
-  },
-  buttonDisabled: {
-    background: "gray",
-    cursor: "not-allowed",
   },
   error: {
     color: "red",

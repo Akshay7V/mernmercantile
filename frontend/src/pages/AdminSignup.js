@@ -9,10 +9,9 @@ const AdminSignup = () => {
         email: "",
         phone: "",
         password: "",
-        confirmPassword: "",
         image: null,
     });
-
+    
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [imagePreview, setImagePreview] = useState(null);
@@ -23,9 +22,10 @@ const AdminSignup = () => {
     }, [formData]);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value.trim(),
+            [name]: value,
         }));
     };
 
@@ -57,34 +57,40 @@ const AdminSignup = () => {
         setError("");
         setSuccess("");
 
-        if (!formData.name || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
-            setError("All fields are required!");
-            return;
+        // Prepare trimmed data for validation
+        const trimmedFormData = {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            password: formData.password,
+        };
+
+        // Check for empty fields
+        for (const key in trimmedFormData) {
+            if (!trimmedFormData[key]) {
+                setError("All fields are required!");
+                return;
+            }
         }
 
-        if (formData.password.length < 6) {
+        if (trimmedFormData.password.length < 6) {
             setError("Password must be at least 6 characters!");
-            return;
-        }
-
-        if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match!");
             return;
         }
 
         setIsSubmitting(true);
 
         const formDataToSend = new FormData();
-        formDataToSend.append("name", formData.name);
-        formDataToSend.append("email", formData.email);
-        formDataToSend.append("phone", formData.phone);
-        formDataToSend.append("password", formData.password);
+        formDataToSend.append("name", trimmedFormData.name);
+        formDataToSend.append("email", trimmedFormData.email);
+        formDataToSend.append("phone", trimmedFormData.phone);
+        formDataToSend.append("password", trimmedFormData.password);
         if (formData.image) {
             formDataToSend.append("image", formData.image);
         }
 
         try {
-            const response = await fetch("", {
+            const response = await fetch("http://localhost:5000/api/admin/register", {
                 method: "POST",
                 body: formDataToSend,
             });
@@ -98,7 +104,7 @@ const AdminSignup = () => {
             }
 
             setSuccess("Registration successful!");
-            setTimeout(() => navigate("/login"), 2000);
+            setTimeout(() => navigate("/admin/admin-login"), 2000);
         } catch (error) {
             setError("Error: " + error.message);
         } finally {
@@ -114,32 +120,70 @@ const AdminSignup = () => {
 
             <form onSubmit={handleSubmit} className="admin-signup-form">
                 <label>Full Name</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                />
 
                 <label>Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                />
 
                 <label>Phone Number</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                />
 
                 <label>Password</label>
-                <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-
-                <label>Confirm Password</label>
-                <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+                <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                />
 
                 <label>Upload Image (Optional)</label>
-                <input type="file" accept="image/*" onChange={handleImageChange} />
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                />
 
-                {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
+                {imagePreview && (
+                    <img src={imagePreview} alt="Preview" className="image-preview" />
+                )}
 
                 <button type="submit" className="signup-btn" disabled={isSubmitting}>
                     {isSubmitting ? "Registering..." : "Sign Up"}
                 </button>
             </form>
+
+            {/* Admin Login Redirect Button */}
+            <div className="login-redirect">
+                <p>Already have an admin account?</p>
+                <button
+                    type="button"
+                    className="login-btn"
+                    onClick={() => navigate("/admin/admin-login")}
+                >
+                    Admin Login
+                </button>
+            </div>
         </div>
     );
 };
-
 
 export default AdminSignup;
