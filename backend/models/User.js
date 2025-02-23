@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -8,7 +7,7 @@ const userSchema = new mongoose.Schema({
   year: { type: String },
   department: { type: String },
   password: { type: String, required: true },
-  image: { type: String } // For storing the image filename or URL
+  image: { type: String } // For storing image filename, URL, or Base64 string
 });
 
 module.exports = mongoose.model("User", userSchema);

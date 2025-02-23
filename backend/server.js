@@ -8,6 +8,12 @@ const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 const PORT = 5000;
 const cors = require("cors");
+// Configure CORS to allow credentials and specify your frontend origin
+app.use(cors({
+  origin: "http://localhost:3000", // Allow requests from your frontend
+  credentials: true,               // Allow credentials (cookies, etc.)
+}));
+
 
 app.use(cors());
 app.use(express.json());

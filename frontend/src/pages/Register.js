@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Register.css"; // Import the CSS file
+import "./Register.css";
 
 const RegisterPage = () => {
   const [userData, setUserData] = useState({
@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(""); // To handle error messages
+  const [error, setError] = useState("");
 
   // Handle text input change
   const handleChange = (e) => {
@@ -34,9 +34,9 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    setError(""); // Clear previous errors
+    setError("");
 
-    // Simple Validation
+    // Simple validation: Check required fields
     if (!userData.name || !userData.email || !userData.password) {
       setError("Name, Email, and Password are required!");
       setLoading(false);
@@ -57,7 +57,7 @@ const RegisterPage = () => {
 
       const response = await fetch("http://127.0.0.1:5000/api/auth/register", {
         method: "POST",
-        body: formData, // Sending FormData
+        body: formData,
       });
 
       const data = await response.json();
@@ -68,7 +68,7 @@ const RegisterPage = () => {
       }
 
       alert("✅ Registration Successful!");
-      
+
       // Reset the form after success
       setUserData({
         name: "",
@@ -81,7 +81,7 @@ const RegisterPage = () => {
       setImage(null);
       setPreview(null);
 
-      window.location.href = "/login"; // Redirect to login
+      window.location.href = "/login"; // Redirect to login page
     } catch (error) {
       console.error("Error:", error.message);
       setError(`❌ Error: ${error.message}`);
@@ -94,10 +94,7 @@ const RegisterPage = () => {
     <div className="register-container">
       <div className="register-card">
         <h2>Register</h2>
-
-        {/* Error Message */}
         {error && <div className="error-message">{error}</div>}
-
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="input-group">
             <label>Name:</label>
@@ -109,7 +106,6 @@ const RegisterPage = () => {
               required
             />
           </div>
-
           <div className="input-group">
             <label>PNR:</label>
             <input
@@ -119,7 +115,6 @@ const RegisterPage = () => {
               onChange={handleChange}
             />
           </div>
-
           <div className="input-group">
             <label>Email:</label>
             <input
@@ -130,7 +125,6 @@ const RegisterPage = () => {
               required
             />
           </div>
-
           <div className="input-group">
             <label>Year:</label>
             <input
@@ -140,7 +134,6 @@ const RegisterPage = () => {
               onChange={handleChange}
             />
           </div>
-
           <div className="input-group">
             <label>Department:</label>
             <input
@@ -150,7 +143,6 @@ const RegisterPage = () => {
               onChange={handleChange}
             />
           </div>
-
           <div className="input-group">
             <label>Password:</label>
             <input
@@ -161,30 +153,20 @@ const RegisterPage = () => {
               required
             />
           </div>
-
-          {/* Image Upload Section */}
           <div className="input-group">
             <label>Upload Image:</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
+            <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
-
-          {/* Image Preview */}
           {preview && (
             <div className="image-preview">
               <p>Image Preview:</p>
               <img src={preview} alt="Preview" width="100" />
             </div>
           )}
-
           <button type="submit" className="register-btn" disabled={loading}>
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
-
         <p className="login-link">
           Already have an account? <a href="/login">Login</a>
         </p>

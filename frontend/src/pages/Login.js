@@ -9,32 +9,27 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent page refresh
-  
+    e.preventDefault();
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Include cookies if backend uses sessions
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",  // Include cookies/credentials
         body: JSON.stringify({ pnr, password }),
       });
-  
       const data = await response.json();
-      console.log("Response Data:", data); // Debugging
-  
+      console.log("Response Data:", data);
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data)); // Store user data
-        navigate("/dashboard"); // Redirect to dashboard
+        // Process successful login
       } else {
-        setError(data.message || "Invalid PNR or Password");
+        setError(data.error || "Invalid credentials");
       }
     } catch (err) {
       console.error("Network Error:", err);
       setError("Network error. Try again later.");
     }
   };
+  
   
   
 
